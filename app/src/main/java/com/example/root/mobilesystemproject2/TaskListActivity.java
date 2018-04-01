@@ -46,15 +46,6 @@ public class TaskListActivity extends AppCompatActivity {
                         intent,
                         6
                 );
-//                TaskEntity taskEntity = new TaskEntity(
-//                        new Date(),
-//                        "name",
-//                        new Date(),
-//                        TaskPriorityEnum.MEDIUM,
-//                        "description"
-//                );
-//                taskEntity.save();
-//                createTableContent(taskEntity);
             }
         });
     }
@@ -78,6 +69,7 @@ public class TaskListActivity extends AppCompatActivity {
         createTextInRow(row, "Nazwa");
         createTextInRow(row, "Termin zakończenia");
         createTextInRow(row, "Priorytet");
+        createTextInRow(row, "Oznacz");
         getTableContainer().addView(row);
     }
 
@@ -88,6 +80,7 @@ public class TaskListActivity extends AppCompatActivity {
         createTextInRow(row, taskEntity.getName());
         createTextInRow(row, taskEntity.getEndDate().toString());
         createTextInRow(row, taskEntity.getPriority().toString());
+        createDoneButtonInRow(row, taskEntity);
         getTableContainer().addView(row);
         getTableContainer().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +95,27 @@ public class TaskListActivity extends AppCompatActivity {
                 new Intent(this, TaskDetailActivity.class),
                 6
         );
+    }
+
+    private void createDoneButtonInRow(final TableRow row, final TaskEntity taskEntity) {
+        Button mark = new Button(this);
+        mark.setPadding(10,10,10,10);
+        updateMarkValue(taskEntity, mark);
+        mark.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                taskEntity.setDone(!taskEntity.isDone());
+                taskEntity.save();
+                updateMarkValue(taskEntity, (Button) view);
+            }
+        });
+        row.addView(mark);
+    }
+
+    private void updateMarkValue(TaskEntity taskEntity, Button remove) {
+        if(taskEntity.isDone()) { remove.setText("Zrobione"); }
+        else { remove.setText("Nie zrobione");}
+        ;
     }
 
     private void removeTableContent(TableRow row) {

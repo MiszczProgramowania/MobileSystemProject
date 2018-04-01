@@ -11,6 +11,7 @@ public class TaskEntity extends SugarRecord<TaskEntity> {
     private Date endDate;
     private TaskPriorityEnum priority;
     private String description;
+    private boolean done;
 
     public TaskEntity() {}
 
@@ -26,6 +27,7 @@ public class TaskEntity extends SugarRecord<TaskEntity> {
         this.endDate = endDate;
         this.priority = priority;
         this.description = description;
+        this.done = false;
     }
 
     public Date getAddDate() {
@@ -66,5 +68,13 @@ public class TaskEntity extends SugarRecord<TaskEntity> {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
+    }
+
+    public boolean isDone() {
+        return done;
     }
 }
