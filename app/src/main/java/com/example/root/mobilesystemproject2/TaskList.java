@@ -1,6 +1,7 @@
 package com.example.root.mobilesystemproject2;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -8,9 +9,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import static android.view.View.inflate;
 
 public class TaskList extends AppCompatActivity {
 
@@ -29,11 +34,46 @@ public class TaskList extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        TableRow tableRow = new TableRow(this);
-        TextView test = new TextView(this);
-        test.setText("test");
-        tableRow.addView(test);
-        getTableContainer().addView(tableRow);
+        fillTable();;
+    }
+
+    private void fillTable() {
+        createTableHeader();
+
+    }
+
+    private void createTableHeader() {
+        TableRow row = createTableRow();
+        createTextInRow(row, "Data dodania");
+        createTextInRow(row, "Nazwa");
+        createTextInRow(row, "Termin zakończenia");
+        createTextInRow(row, "Priorytet");
+        getTableContainer().addView(row);
+    }
+
+
+    private void createTableContent() {
+        TableRow row = createTableRow();
+        createTextInRow(row, "Data dodania");
+        createTextInRow(row, "Nazwa");
+        createTextInRow(row, "Termin zakończenia");
+        createTextInRow(row, "Priorytet");
+        getTableContainer().addView(row);
+    }
+
+    private void createTextInRow(TableRow row, String text) {
+        TextView qty = new TextView(this);
+        qty.setPadding(10,10,10,10);
+        qty.setText(text);
+        row.addView(qty);
+    }
+
+    @NonNull
+    private TableRow createTableRow() {
+        TableRow row= new TableRow(this);
+        TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
+        row.setLayoutParams(lp);
+        return row;
     }
 
     @Override
