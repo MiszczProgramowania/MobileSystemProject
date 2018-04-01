@@ -14,6 +14,12 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.example.root.mobilesystemproject2.entity.TaskEntity;
+import com.example.root.mobilesystemproject2.entity.TaskPriority;
+
+import java.util.Date;
+import java.util.List;
+
 public class TaskListActivity extends AppCompatActivity {
 
     @Override
@@ -23,14 +29,23 @@ public class TaskListActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         registerAddNewTaskOnAddFloatingButton();
-        fillTable();;
+//        TaskEntity.deleteAll(TaskEntity.class);
+        fillTable();
     }
 
     private void registerAddNewTaskOnAddFloatingButton() {
         getAddFloatingButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createTableContent();
+                TaskEntity taskEntity = new TaskEntity(
+                        new Date(),
+                        "name",
+                        new Date(),
+                        TaskPriority.MEDIUM,
+                        "description"
+                );
+                taskEntity.save();
+                createTableContent(taskEntity);
             }
         });
     }
@@ -40,7 +55,12 @@ public class TaskListActivity extends AppCompatActivity {
     }
 
     private void fillTable() {
+        getTableContainer().removeAllViews();
         createTableHeader();
+        List<TaskEntity> taskEntities = TaskEntity.listAll(TaskEntity.class);
+        for(TaskEntity taskEntity: taskEntities) {
+            createTableContent(taskEntity);
+        }
     }
 
     private void createTableHeader() {
@@ -54,13 +74,13 @@ public class TaskListActivity extends AppCompatActivity {
     }
 
 
-    private void createTableContent() {
+    private void createTableContent(TaskEntity taskEntity) {
         TableRow row = createTableRow();
-        createTextInRow(row, "Data dodania");
-        createTextInRow(row, "Nazwa");
-        createTextInRow(row, "Termin zakończenia");
-        createTextInRow(row, "Priorytet");
-        createRemoveButtonInRow(row);
+        createTextInRow(row, taskEntity.getAddDate().toString());
+        createTextInRow(row, taskEntity.getName());
+        createTextInRow(row, taskEntity.getEndDate().toString());
+        createTextInRow(row, taskEntity.getPriority().toString());
+        createRemoveButtonInRow(row, taskEntity);
         getTableContainer().addView(row);
         getTableContainer().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,13 +97,14 @@ public class TaskListActivity extends AppCompatActivity {
         );
     }
 
-    private void createRemoveButtonInRow(final TableRow row) {
+    private void createRemoveButtonInRow(final TableRow row, final TaskEntity taskEntity) {
         Button remove = new Button(this);
         remove.setPadding(10,10,10,10);
         remove.setText("Usuń");
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                taskEntity.delete();
                 removeTableContent(row);
             }
         });
@@ -91,6 +112,7 @@ public class TaskListActivity extends AppCompatActivity {
     }
 
     private void removeTableContent(TableRow row) {
+
         getTableContainer().removeView(row);
     }
 

@@ -2,11 +2,8 @@ package com.example.root.mobilesystemproject2.entity;
 
 import com.orm.SugarRecord;
 
-import java.sql.Date;
+import java.util.Date;
 
-enum TaskPriority {
-    LOW, MEDIUM, HIGHT
-}
 
 public class TaskEntity extends SugarRecord<TaskEntity> {
     private Date addDate;
