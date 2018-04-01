@@ -3,19 +3,15 @@ package com.example.root.mobilesystemproject2;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.CheckBox;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
-import static android.view.View.inflate;
 
 public class TaskList extends AppCompatActivity {
 
@@ -25,21 +21,25 @@ public class TaskList extends AppCompatActivity {
         setContentView(R.layout.activity_task_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        registerAddNewTaskOnAddFloatingButton();
+        fillTable();;
+    }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+    private void registerAddNewTaskOnAddFloatingButton() {
+        getAddFloatingButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                createTableContent();
             }
         });
-        fillTable();;
+    }
+
+    private FloatingActionButton getAddFloatingButton() {
+        return (FloatingActionButton) findViewById(R.id.fab);
     }
 
     private void fillTable() {
         createTableHeader();
-
     }
 
     private void createTableHeader() {
@@ -48,6 +48,7 @@ public class TaskList extends AppCompatActivity {
         createTextInRow(row, "Nazwa");
         createTextInRow(row, "Termin zakończenia");
         createTextInRow(row, "Priorytet");
+        createTextInRow(row, "Usuń");
         getTableContainer().addView(row);
     }
 
@@ -58,7 +59,25 @@ public class TaskList extends AppCompatActivity {
         createTextInRow(row, "Nazwa");
         createTextInRow(row, "Termin zakończenia");
         createTextInRow(row, "Priorytet");
+        createRemoveButtonInRow(row);
         getTableContainer().addView(row);
+    }
+
+    private void createRemoveButtonInRow(final TableRow row) {
+        Button remove = new Button(this);
+        remove.setPadding(10,10,10,10);
+        remove.setText("Usuń");
+        remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                removeTableContent(row);
+            }
+        });
+        row.addView(remove);
+    }
+
+    private void removeTableContent(TableRow row) {
+        getTableContainer().removeView(row);
     }
 
     private void createTextInRow(TableRow row, String text) {
