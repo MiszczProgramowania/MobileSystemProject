@@ -10,6 +10,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.example.root.mobilesystemproject2.entity.TaskEntity;
 import com.example.root.mobilesystemproject2.entity.TaskPriorityEnum;
 
 import java.util.Calendar;
@@ -23,6 +24,29 @@ public class TaskDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_task_detail);
         registerEndDatePicker();
         registerEnumInPrioritySpinner();
+        registerOnSaveResult();
+    }
+
+    private void registerOnSaveResult() {
+        getSaveButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                processSaveEntity();
+            }
+        });
+    }
+
+    private void processSaveEntity() {
+        TaskEntity taskEntity = new TaskEntity(
+                new Date(),
+                getName().getText().toString(),
+                new Date(), //TODO: implement real endDate from picker
+                (TaskPriorityEnum) getPriority().getSelectedItem(),
+                getDescription().getText().toString()//get from endDate editText
+        );
+        taskEntity.save();
+        setResult(RESULT_OK);
+        finish();
     }
 
     private void registerEnumInPrioritySpinner() {

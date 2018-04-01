@@ -28,6 +28,11 @@ public class TaskListActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         registerAddNewTaskOnAddFloatingButton();
 //        TaskEntity.deleteAll(TaskEntity.class);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
         fillTable();
     }
 
@@ -73,7 +78,6 @@ public class TaskListActivity extends AppCompatActivity {
         createTextInRow(row, "Nazwa");
         createTextInRow(row, "Termin zakończenia");
         createTextInRow(row, "Priorytet");
-        createTextInRow(row, "Usuń");
         getTableContainer().addView(row);
     }
 
@@ -84,7 +88,6 @@ public class TaskListActivity extends AppCompatActivity {
         createTextInRow(row, taskEntity.getName());
         createTextInRow(row, taskEntity.getEndDate().toString());
         createTextInRow(row, taskEntity.getPriority().toString());
-        createRemoveButtonInRow(row, taskEntity);
         getTableContainer().addView(row);
         getTableContainer().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,20 +102,6 @@ public class TaskListActivity extends AppCompatActivity {
                 new Intent(this, TaskDetailActivity.class),
                 6
         );
-    }
-
-    private void createRemoveButtonInRow(final TableRow row, final TaskEntity taskEntity) {
-        Button remove = new Button(this);
-        remove.setPadding(10,10,10,10);
-        remove.setText("Usuń");
-        remove.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                taskEntity.delete();
-                removeTableContent(row);
-            }
-        });
-        row.addView(remove);
     }
 
     private void removeTableContent(TableRow row) {
