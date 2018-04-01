@@ -34,18 +34,24 @@ public class TaskListActivity extends AppCompatActivity {
     }
 
     private void registerAddNewTaskOnAddFloatingButton() {
+        final TaskListActivity self = this;
         getAddFloatingButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                TaskEntity taskEntity = new TaskEntity(
-                        new Date(),
-                        "name",
-                        new Date(),
-                        TaskPriority.MEDIUM,
-                        "description"
+                Intent intent = new Intent(self, TaskDetailActivity.class);
+                startActivityForResult(
+                        intent,
+                        6
                 );
-                taskEntity.save();
-                createTableContent(taskEntity);
+//                TaskEntity taskEntity = new TaskEntity(
+//                        new Date(),
+//                        "name",
+//                        new Date(),
+//                        TaskPriority.MEDIUM,
+//                        "description"
+//                );
+//                taskEntity.save();
+//                createTableContent(taskEntity);
             }
         });
     }
