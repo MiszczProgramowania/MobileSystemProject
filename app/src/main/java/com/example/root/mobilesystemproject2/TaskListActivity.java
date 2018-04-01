@@ -15,9 +15,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.example.root.mobilesystemproject2.entity.TaskEntity;
-import com.example.root.mobilesystemproject2.entity.TaskPriority;
 
-import java.util.Date;
 import java.util.List;
 
 public class TaskListActivity extends AppCompatActivity {
@@ -47,7 +45,7 @@ public class TaskListActivity extends AppCompatActivity {
 //                        new Date(),
 //                        "name",
 //                        new Date(),
-//                        TaskPriority.MEDIUM,
+//                        TaskPriorityEnum.MEDIUM,
 //                        "description"
 //                );
 //                taskEntity.save();

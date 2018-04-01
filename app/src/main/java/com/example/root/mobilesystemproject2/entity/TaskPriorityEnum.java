@@ -1,5 +1,5 @@
 package com.example.root.mobilesystemproject2.entity;
 
-public enum TaskPriority {
+public enum TaskPriorityEnum {
     LOW, MEDIUM, HIGHT
 }

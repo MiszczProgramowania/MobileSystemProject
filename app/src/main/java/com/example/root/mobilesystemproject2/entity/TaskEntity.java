@@ -9,7 +9,7 @@ public class TaskEntity extends SugarRecord<TaskEntity> {
     private Date addDate;
     private String name;
     private Date endDate;
-    private TaskPriority priority;
+    private TaskPriorityEnum priority;
     private String description;
 
     public TaskEntity() {}
@@ -18,7 +18,7 @@ public class TaskEntity extends SugarRecord<TaskEntity> {
             Date addDate,
             String name,
             Date endDate,
-            TaskPriority priority,
+            TaskPriorityEnum priority,
             String description
     ) {
         this.addDate = addDate;
@@ -52,11 +52,11 @@ public class TaskEntity extends SugarRecord<TaskEntity> {
         this.endDate = endDate;
     }
 
-    public TaskPriority getPriority() {
+    public TaskPriorityEnum getPriority() {
         return priority;
     }
 
-    public void setPriority(TaskPriority priority) {
+    public void setPriority(TaskPriorityEnum priority) {
         this.priority = priority;
     }
 

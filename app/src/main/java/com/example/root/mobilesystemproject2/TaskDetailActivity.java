@@ -4,10 +4,13 @@ import android.app.DatePickerDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import com.example.root.mobilesystemproject2.entity.TaskPriorityEnum;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -18,10 +21,23 @@ public class TaskDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
-        registerDatePicker();
+        registerEndDatePicker();
+        registerEnumInPrioritySpinner();
     }
 
-    private void registerDatePicker() {
+    private void registerEnumInPrioritySpinner() {
+        getPriority()
+                .setAdapter(
+                        new ArrayAdapter<TaskPriorityEnum>(
+                                this,
+                                R.layout.simple_list_item,
+                                R.id.value,
+                                TaskPriorityEnum.values()
+                        )
+                );
+    }
+
+    private void registerEndDatePicker() {
         final TaskDetailActivity self = this;
         getEndDate().setOnClickListener(new View.OnClickListener() {
             @Override
