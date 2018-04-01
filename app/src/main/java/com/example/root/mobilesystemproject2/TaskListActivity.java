@@ -1,5 +1,6 @@
 package com.example.root.mobilesystemproject2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -13,7 +14,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-public class TaskList extends AppCompatActivity {
+public class TaskListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,19 @@ public class TaskList extends AppCompatActivity {
         createTextInRow(row, "Priorytet");
         createRemoveButtonInRow(row);
         getTableContainer().addView(row);
+        getTableContainer().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDetailTaskActivity();
+            }
+        });
+    }
+
+    private void openDetailTaskActivity() {
+        startActivityForResult(
+                new Intent(this, TaskDetailActivity.class),
+                6
+        );
     }
 
     private void createRemoveButtonInRow(final TableRow row) {
