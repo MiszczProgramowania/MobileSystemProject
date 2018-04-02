@@ -4,7 +4,7 @@
 - wyświetlenie listy zadań <DONE>,
 - dodanie zadania na listę <DONE>,
 - edycję zadania z listy,
-- usuwanie zadania z listy,
+- usuwanie zadania z listy,<DONE>
 - oznaczenie zadania jako zrobione,<DONE>
 - generowanie przypomnienia o zadaniach do zrobienia na dzisiaj, lub których termin minął,
 - eksport listy zadań do pliku tekstowego <ZAMIAST TEGO BAZA>,
