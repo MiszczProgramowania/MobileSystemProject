@@ -74,7 +74,7 @@ public class TaskListActivity extends AppCompatActivity {
     }
 
 
-    private void createTableContent(TaskEntity taskEntity) {
+    private void createTableContent(final TaskEntity taskEntity) {
         TableRow row = createTableRow();
         createTextInRow(row, taskEntity.getAddDate().toString());
         createTextInRow(row, taskEntity.getName());
@@ -85,16 +85,15 @@ public class TaskListActivity extends AppCompatActivity {
         getTableContainer().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDetailTaskActivity();
+                openDetailTaskActivity(taskEntity);
             }
         });
     }
 
-    private void openDetailTaskActivity() {
-        startActivityForResult(
-                new Intent(this, TaskDetailActivity.class),
-                6
-        );
+    private void openDetailTaskActivity(TaskEntity taskEntity) {
+        Intent intent = new Intent(this, TaskDetailActivity.class);
+        intent.putExtra("TaskEntityId", taskEntity.getId());
+        startActivity(intent);
     }
 
     private void createDoneButtonInRow(final TableRow row, final TaskEntity taskEntity) {

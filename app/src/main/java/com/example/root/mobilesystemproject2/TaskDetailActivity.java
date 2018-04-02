@@ -18,25 +18,80 @@ import java.util.Date;
 
 public class TaskDetailActivity extends AppCompatActivity {
 
+    private TaskEntity entityToEdit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_task_detail);
+        initEditEntityIfCan();
+        if(isEditMode()) {
+            setContentView(R.layout.activity_task_detail_edit);
+            registerOnEditResult();
+            registerOnRemoveResult();
+        }else {
+            setContentView(R.layout.activity_task_detail);
+            registerOnCreateResult();
+        }
+
         registerEndDatePicker();
         registerEnumInPrioritySpinner();
-        registerOnSaveResult();
     }
 
-    private void registerOnSaveResult() {
+
+    private void initEditEntityIfCan() {
+        if (getIntent().getExtras() == null) {
+            return;
+        }
+        long id = getIntent().getExtras().getLong("TaskEntityId");
+        entityToEdit = TaskEntity.findById(TaskEntity.class, id);
+    }
+
+    private boolean isEditMode() {
+        return entityToEdit != null;
+    }
+
+    private void registerOnCreateResult() {
         getSaveButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                processSaveEntity();
+                processSaveNewEntity();
             }
         });
     }
 
-    private void processSaveEntity() {
+    private void registerOnEditResult() {
+        getEditButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                processEditEntity();
+            }
+        });
+    }
+
+
+    private void registerOnRemoveResult() {
+        getRemoveButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                entityToEdit.delete();
+                finish();
+            }
+        });
+    }
+
+    private void processEditEntity() {
+        entityToEdit.setName(
+                getName().getText().toString()
+        );
+        entityToEdit.setEndDate(new Date());  //TODO: implement real endDate from picker
+        entityToEdit.setPriority((TaskPriorityEnum) getPriority().getSelectedItem());
+        entityToEdit.setDescription(getDescription().getText().toString());
+        entityToEdit.save();
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    private void processSaveNewEntity() {
         TaskEntity taskEntity = new TaskEntity(
                 new Date(),
                 getName().getText().toString(),
@@ -108,5 +163,13 @@ public class TaskDetailActivity extends AppCompatActivity {
 
     private Button getSaveButton() {
         return findViewById(R.id.saveButton);
+    }
+
+    private Button getEditButton() {
+        return findViewById(R.id.editButton);
+    }
+
+    private Button getRemoveButton() {
+        return findViewById(R.id.removeButton);
     }
 }

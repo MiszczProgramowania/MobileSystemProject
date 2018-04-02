@@ -1,6 +1,6 @@
 
 # Funkcjonalności:
-
+- używanie datepickera do odczytu daty
 - wyświetlenie listy zadań <DONE>,
 - dodanie zadania na listę <DONE>,
 - edycję zadania z listy,
