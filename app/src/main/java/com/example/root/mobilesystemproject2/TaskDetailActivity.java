@@ -19,6 +19,7 @@ import java.util.Date;
 public class TaskDetailActivity extends AppCompatActivity {
 
     private TaskEntity entityToEdit;
+    private Date selectedDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +84,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         entityToEdit.setName(
                 getName().getText().toString()
         );
-        entityToEdit.setEndDate(new Date());  //TODO: implement real endDate from picker
+        entityToEdit.setEndDate(selectedDate != null ? selectedDate : new Date());  //TODO: implement real endDate from picker
         entityToEdit.setPriority((TaskPriorityEnum) getPriority().getSelectedItem());
         entityToEdit.setDescription(getDescription().getText().toString());
         entityToEdit.save();
@@ -95,7 +96,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         TaskEntity taskEntity = new TaskEntity(
                 new Date(),
                 getName().getText().toString(),
-                new Date(), //TODO: implement real endDate from picker
+                selectedDate != null ? selectedDate : new Date(),
                 (TaskPriorityEnum) getPriority().getSelectedItem(),
                 getDescription().getText().toString()//get from endDate editText
         );
@@ -132,8 +133,8 @@ public class TaskDetailActivity extends AppCompatActivity {
                                 new DatePickerDialog.OnDateSetListener() {
                                     @Override
                                     public void onDateSet(DatePicker datePicker, int yeat, int month, int day) {
-                                        Date d = new Date(yeat, month, day);
-                                        getEndDate().setText(d.toString());
+                                        selectedDate = new Date(yeat, month, day);
+                                        getEndDate().setText(selectedDate.toString());
                                     }
                                 },
                                 mYear,

@@ -1,6 +1,5 @@
 
 # Funkcjonalności:
-- używanie datepickera do odczytu daty
 - wyświetlenie listy zadań <DONE>,
 - dodanie zadania na listę <DONE>,
 - edycję zadania z listy,
@@ -14,3 +13,6 @@ statusie),
 - dodawanie załączników do zadania – zdjęć i plików wideo (np. przechwyconych z aparatu urządzenia),
 - usunięcie załączników z zadania,
 - wyświetlenie listy załączników przypisanych do zadania.
+
+# bugi:
+- używanie datepickera do odczytu daty <DONE>
