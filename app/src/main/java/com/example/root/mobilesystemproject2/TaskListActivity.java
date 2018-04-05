@@ -1,11 +1,13 @@
 package com.example.root.mobilesystemproject2;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,9 +18,12 @@ import android.widget.TextView;
 
 import com.example.root.mobilesystemproject2.entity.TaskEntity;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TaskListActivity extends AppCompatActivity {
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,15 +43,12 @@ public class TaskListActivity extends AppCompatActivity {
 
     private void registerAddNewTaskOnAddFloatingButton() {
         final TaskListActivity self = this;
-        getAddFloatingButton().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(self, TaskDetailActivity.class);
-                startActivityForResult(
-                        intent,
-                        6
-                );
-            }
+        getAddFloatingButton().setOnClickListener(view -> {
+            Intent intent = new Intent(self, TaskDetailActivity.class);
+            startActivityForResult(
+                    intent,
+                    6
+            );
         });
     }
 
@@ -57,7 +59,14 @@ public class TaskListActivity extends AppCompatActivity {
     private void fillTable() {
         getTableContainer().removeAllViews();
         createTableHeader();
-        List<TaskEntity> taskEntities = TaskEntity.listAll(TaskEntity.class);
+        List<TaskEntity> taskEntities;
+        try {
+            taskEntities = TaskEntity.listAll(TaskEntity.class);
+        }
+        catch (SQLiteException e){
+            Log.e("SQL",e.toString());
+            taskEntities = new ArrayList<>();
+        }
         for(TaskEntity taskEntity: taskEntities) {
             createTableContent(taskEntity);
         }
@@ -65,10 +74,11 @@ public class TaskListActivity extends AppCompatActivity {
 
     private void createTableHeader() {
         TableRow row = createTableRow();
-        createTextInRow(row, "Data dodania");
+        createTextInRow(row, "Dodano");
         createTextInRow(row, "Nazwa");
-        createTextInRow(row, "Termin zakończenia");
+        createTextInRow(row, "Zakończenie");
         createTextInRow(row, "Priorytet");
+        createTextInRow(row, "Edytuj");
         createTextInRow(row, "Oznacz");
         getTableContainer().addView(row);
     }
@@ -76,18 +86,13 @@ public class TaskListActivity extends AppCompatActivity {
 
     private void createTableContent(final TaskEntity taskEntity) {
         TableRow row = createTableRow();
-        createTextInRow(row, taskEntity.getAddDate().toString());
+        createTextInRow(row, dateFormat.format(taskEntity.getAddDate()));
         createTextInRow(row, taskEntity.getName());
-        createTextInRow(row, taskEntity.getEndDate().toString());
+        createTextInRow(row, dateFormat.format(taskEntity.getEndDate()));
         createTextInRow(row, taskEntity.getPriority().toString());
         createDoneButtonInRow(row, taskEntity);
+        createEditButtonInRow(row, taskEntity);
         getTableContainer().addView(row);
-        getTableContainer().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openDetailTaskActivity(taskEntity);
-            }
-        });
     }
 
     private void openDetailTaskActivity(TaskEntity taskEntity) {
@@ -100,15 +105,22 @@ public class TaskListActivity extends AppCompatActivity {
         Button mark = new Button(this);
         mark.setPadding(10,10,10,10);
         updateMarkValue(taskEntity, mark);
-        mark.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                taskEntity.setDone(!taskEntity.isDone());
-                taskEntity.save();
-                updateMarkValue(taskEntity, (Button) view);
-            }
+        mark.setOnClickListener(view -> {
+            taskEntity.setDone(!taskEntity.isDone());
+            taskEntity.save();
+            updateMarkValue(taskEntity, (Button) view);
         });
         row.addView(mark);
+    }
+
+    private void createEditButtonInRow(final TableRow row, final TaskEntity taskEntity) {
+        Button edit = new Button(this);
+        edit.setText("Edytuj");
+        edit.setPadding(10,10,10,10);
+        edit.setOnClickListener((view) -> {
+            openDetailTaskActivity(taskEntity);
+        });
+        row.addView(edit);
     }
 
     private void updateMarkValue(TaskEntity taskEntity, Button remove) {

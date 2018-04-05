@@ -5,7 +5,7 @@ import com.orm.SugarRecord;
 import java.util.Date;
 
 
-public class TaskEntity extends SugarRecord<TaskEntity> {
+public class TaskEntity extends SugarRecord {
     private Date addDate;
     private String name;
     private Date endDate;
