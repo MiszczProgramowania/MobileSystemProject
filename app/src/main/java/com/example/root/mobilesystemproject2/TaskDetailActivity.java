@@ -28,6 +28,7 @@ public class TaskDetailActivity extends AppCompatActivity {
         if(isEditMode()) {
             setContentView(R.layout.activity_task_detail_edit);
             registerOnEditResult();
+            fillForm(entityToEdit);
             registerOnRemoveResult();
         }else {
             setContentView(R.layout.activity_task_detail);
@@ -38,6 +39,12 @@ public class TaskDetailActivity extends AppCompatActivity {
         registerEnumInPrioritySpinner();
     }
 
+    private void fillForm(TaskEntity entityToEdit) {
+        getName().setText(entityToEdit.getName());
+        getEndDate().setText(entityToEdit.getEndDate().toString());
+        getDescription().setText(entityToEdit.getDescription());
+        getPriority().setSelection(entityToEdit.getPriority().ordinal());
+    }
 
     private void initEditEntityIfCan() {
         if (getIntent().getExtras() == null) {
