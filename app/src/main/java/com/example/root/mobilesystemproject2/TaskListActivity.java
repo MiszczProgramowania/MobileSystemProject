@@ -17,10 +17,12 @@ import android.widget.TextView;
 
 import com.annimon.stream.Stream;
 import com.example.root.mobilesystemproject2.entity.TaskEntity;
+import com.example.root.mobilesystemproject2.notify.ScheduledNotifyHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class TaskListActivity extends AppCompatActivity {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -29,6 +31,13 @@ public class TaskListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ScheduledNotifyHelper.scheduleNotification(
+                ScheduledNotifyHelper.getNotification(
+                        "5 second delay",this
+                ),
+                5000,
+                this
+        );
         setContentView(R.layout.activity_task_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
