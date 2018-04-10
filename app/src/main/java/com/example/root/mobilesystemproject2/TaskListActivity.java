@@ -8,7 +8,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -16,6 +15,7 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import com.annimon.stream.Stream;
 import com.example.root.mobilesystemproject2.entity.TaskEntity;
 
 import java.text.SimpleDateFormat;
@@ -24,6 +24,7 @@ import java.util.List;
 
 public class TaskListActivity extends AppCompatActivity {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    private String sortBy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,25 @@ public class TaskListActivity extends AppCompatActivity {
             Log.e("SQL",e.toString());
             taskEntities = new ArrayList<>();
         }
+
+        if(sortBy != null) {
+
+                switch (sortBy) {
+                    case "Dodano":
+                        taskEntities = Stream.of(taskEntities).sortBy((e) ->e.getAddDate().getTime()).toList();
+                        break;
+                    case "Nazwa":
+                        taskEntities = Stream.of(taskEntities).sortBy(TaskEntity::getName).toList();
+                        break;
+                    case "Zakończenie":
+                        taskEntities = Stream.of(taskEntities).sortBy((e) ->e.getEndDate().getTime()).toList();
+                        break;
+                    case "Priorytet":
+                        taskEntities = Stream.of(taskEntities).sortBy(TaskEntity::getPriority).toList();
+                        break;
+                }
+        }
+
         for(TaskEntity taskEntity: taskEntities) {
             createTableContent(taskEntity);
         }
@@ -74,13 +94,23 @@ public class TaskListActivity extends AppCompatActivity {
 
     private void createTableHeader() {
         TableRow row = createTableRow();
-        createTextInRow(row, "Dodano");
-        createTextInRow(row, "Nazwa");
-        createTextInRow(row, "Zakończenie");
-        createTextInRow(row, "Priorytet");
+        createTextInRow(row, "Dodano")
+            .setOnClickListener( (e) -> setSortBy("Dodano"));
+        createTextInRow(row, "Nazwa")
+                .setOnClickListener( (e) -> setSortBy("Nazwa"));
+        createTextInRow(row, "Zakończenie")
+                .setOnClickListener( (e) -> setSortBy("Zakończenie"));
+        createTextInRow(row, "Priorytet")
+                .setOnClickListener( (e) -> setSortBy("Priorytet"));
         createTextInRow(row, "Edytuj");
         createTextInRow(row, "Oznacz");
         getTableContainer().addView(row);
+    }
+
+    private void setSortBy(String bywhat) {
+        sortBy = bywhat;
+        getTableContainer().removeAllViews();
+        fillTable();
     }
 
 
@@ -134,11 +164,12 @@ public class TaskListActivity extends AppCompatActivity {
         getTableContainer().removeView(row);
     }
 
-    private void createTextInRow(TableRow row, String text) {
+    private TextView createTextInRow(TableRow row, String text) {
         TextView qty = new TextView(this);
         qty.setPadding(10,10,10,10);
         qty.setText(text);
         row.addView(qty);
+        return qty;
     }
 
     @NonNull
